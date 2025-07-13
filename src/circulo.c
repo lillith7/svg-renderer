@@ -50,17 +50,28 @@ void circulo(int x, int y, unsigned int radio, unsigned int color, unsigned int 
 
     for (unsigned int x_actual = xmin; x_actual < xmax; x_actual++){
         for (unsigned int y_actual = ymin; y_actual < ymax; y_actual++) {
-            uint32_t colores[4] = {0,0,0,0};
+            double puntos = 4;
 
             for (uint8_t i = 0; i < 2; i++) {
                 for (uint8_t j = 0; j < 2; j++){ 
-                    if (distancia(x, y, x_actual+i, y_actual+j) <= radio) {
-                        colores[i+j] = color;
+                    if (distancia(x, y, x_actual + i * 0.5 + 0.25, y_actual + j * 0.5 + 0.25) <= radio) {
+                        puntos--;
                     }
+                    
                 }
             }
 
-            poner_pixel(x_actual, y_actual, ancho, promediar_colores_multiples(4,colores), imagen);
+            double valor_alfa = ((color >> 24) & 0xFF)/255;
+            // valor_alfa = reducir_alfa(valor_alfa, puntos, 4);
+            valor_alfa = valor_alfa * ((4 - puntos) / 4.0);
+
+            double alfa_base = ((color >> 24) & 0xFF) / 255.0;
+            double cobertura = (4 - puntos) / 4.0;
+            double alfa_final = alfa_base * cobertura;
+
+            uint32_t color_final = (color & 0x00FFFFFF) | ((uint32_t)(alfa_final * 255.0) << 24);
+            poner_pixel(x_actual, y_actual, ancho, color_final, imagen);
+
 
 
         }

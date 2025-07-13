@@ -78,3 +78,14 @@ uint32_t mezclar_rgba(uint32_t color_a, uint32_t color_b) {
     return ((uint32_t)out_a << 24) | ((uint32_t)out_b << 16) | ((uint32_t)out_g << 8) | (uint32_t)out_r;
 
 }
+
+double reducir_alfa(double alfa, int puntos, int pasos) {
+    if (pasos <= 0) return 0.0;
+    if (puntos < 0) puntos = 0;
+
+    if (puntos >= pasos) return 0.0;
+
+    double x = alfa / pasos;
+
+    return alfa - (puntos * x);
+}

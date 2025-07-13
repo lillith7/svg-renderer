@@ -21,6 +21,8 @@ int main(int argc, char** argv) {
 
     LIBXML_TEST_VERSION
 
+    printf("%f\n", reducir_alfa(1.0f,3,4));
+
     xmlDocPtr svg;
     xmlNodePtr nodo;
     svg = xmlParseFile(argv[1]);
@@ -102,7 +104,9 @@ int main(int argc, char** argv) {
     capa_b.altura = 500;
     capa_b.imagen = malloc(500*500*4);
 
-    circulo(250,250,100,0x8f000000,500,500,capa_b.imagen);
+    circulo(250,250,100,0xaf00ff00,500,500,capa_b.imagen);
+
+    // capa_b = combinar_capas(capa_b, bg);
 
     capa_t nueva_capa = combinar_capas(capa_b, capa_a);
 
