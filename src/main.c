@@ -1,14 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <libxml/parser.h>
-#include <libxml/tree.h>
-
 #include <ppm.h>
 #include <circulo.h>
 #include <pixel.h>
 #include <color.h>
 #include <capa.h>
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 
 int main(int argc, char** argv) {
 
@@ -42,8 +43,8 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    unsigned int ancho = atoi(xmlGetProp(nodo, "width"));
-    unsigned int altura = atoi(xmlGetProp(nodo, "height"));
+    uint32_t ancho = atoi(xmlGetProp(nodo, "width"));
+    uint32_t altura = atoi(xmlGetProp(nodo, "height"));
 
     printf("ancho: %d\naltura: %d\n", ancho, altura);
     
@@ -56,14 +57,14 @@ int main(int argc, char** argv) {
 
     nodo = nodo->xmlChildrenNode;
 
+    // cada capa se combinará con el fondo después de dibujarla
+
     capa_t fondo;
     fondo.ancho = ancho;
     fondo.altura = altura;
     fondo.imagen = malloc(ancho*altura*4);
 
-    for (uint32_t i = 0; i < ancho*altura; i++) {
-        fondo.imagen[i] = 0xffffffff;
-    }
+    memset(fondo.imagen,0xff,ancho*altura*4);
 
     while (nodo) {
 
@@ -72,14 +73,12 @@ int main(int argc, char** argv) {
         capa.altura = altura;
         capa.imagen = malloc(ancho*altura*4);
 
-        for (uint32_t i = 0; i < ancho*altura; i++) {
-            capa.imagen[i] = 0x00000000;
-        }
+        memset(capa.imagen,0x00,ancho*altura*4);
 
         if(!strcmp(nodo->name,"circle")) {
-            const unsigned int radio = atoi(xmlGetProp(nodo, "r"));
-            const unsigned int x = atoi(xmlGetProp(nodo, "cx"));
-            const unsigned int y = atoi(xmlGetProp(nodo, "cy"));
+            const int32_t radio = atoi(xmlGetProp(nodo, "r"));
+            const int32_t x = atoi(xmlGetProp(nodo, "cx"));
+            const int32_t y = atoi(xmlGetProp(nodo, "cy"));
             circulo(x,y,radio,parsar_cadena_de_color(xmlGetProp(nodo,"fill")),ancho,altura,capa.imagen);
         }
 
@@ -88,42 +87,8 @@ int main(int argc, char** argv) {
         nodo = nodo->next;
     }
 
-    unsigned char* datos_ppm = convertir_imagen_rgba_a_datos_ppm(ancho, altura, fondo.imagen, false);
+    uint8_t* datos_ppm = convertir_imagen_rgba_a_datos_ppm(ancho, altura, fondo.imagen, false);
     escribir_ppm(argv[2], ancho, altura, datos_ppm);
-
-
-
-    // capa_t bg;
-    // bg.ancho = 500;
-    // bg.altura = 500;
-    // bg.imagen = malloc(500*500*4);
-
-    // for (uint32_t i = 0; i < 500*500; i++) {
-    //     bg.imagen[i] = 0xffffffff;
-    // }
-
-    // capa_t capa_a;
-    // capa_a.ancho = 500;
-    // capa_a.altura = 500;
-    // capa_a.imagen = malloc(500*500*4);
-
-    // circulo(0,0,400,0xff00ff00,500,500,capa_a.imagen);
-
-    // capa_a = combinar_capas(capa_a, bg);
-
-    // capa_t capa_b;
-    // capa_b.ancho = 500;
-    // capa_b.altura = 500;
-    // capa_b.imagen = malloc(500*500*4);
-
-    // circulo(250,250,100,0x6f0000ff,500,500,capa_b.imagen);
-
-    // capa_t nueva_capa = combinar_capas(capa_b, capa_a);
-
-    // unsigned char* datos_ppm = convertir_imagen_rgba_a_datos_ppm(500, 500, nueva_capa.imagen, false);
-    // escribir_ppm(argv[2], 500, 500, datos_ppm);
-
-
 
     return 0;
 }

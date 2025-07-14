@@ -103,6 +103,9 @@ uint32_t parsar_cadena_de_color(char* cadena) {
         if (strlen(cadena) == 5) { // formato #fa88 (#rgba)
             uint8_t cadena_actual[2] = {0,0};
 
+            cadena_actual[0] = cadena[4]; // alfa
+            color = (color & 0x00FFFFFF) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)) << 24);
+
             cadena_actual[0] = cadena[3]; // azul
             color = (color & 0xFF00FFFF) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)) << 16);
 
@@ -111,9 +114,6 @@ uint32_t parsar_cadena_de_color(char* cadena) {
 
             cadena_actual[0] = cadena[1]; // rojo
             color = (color & 0xFFFFFF00) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)));
-
-            cadena_actual[0] = cadena[4]; // alfa
-            color = (color & 0x00FFFFFF) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)) << 24);
 
             return color;
         }

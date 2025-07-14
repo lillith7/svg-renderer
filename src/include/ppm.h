@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdbool.h>
+#include <stdint.h>
+uint8_t* convertir_imagen_rgba_a_datos_ppm (uint32_t ancho, uint32_t altura, uint32_t* datos_rgba, bool fondo_ajedrezado);
 
-unsigned char* convertir_imagen_rgba_a_datos_ppm (const unsigned int ancho, const unsigned int altura, const unsigned int* datos_rgba, bool fondo_ajedrezado);
-bool escribir_ppm(const char* filename, const unsigned int ancho, const unsigned int altura, const unsigned char* image_data);
+bool escribir_ppm(const char* filename, uint32_t ancho, uint32_t altura, uint8_t* image_data);

@@ -3,12 +3,13 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
-unsigned char* convertir_imagen_rgba_a_datos_ppm (const unsigned int ancho, const unsigned int altura, const unsigned int* datos_rgba, bool fondo_ajedrezado) {
-    unsigned char* datos_ppm = malloc(ancho * altura * 3);
+uint8_t* convertir_imagen_rgba_a_datos_ppm (uint32_t ancho, uint32_t altura, uint32_t* datos_rgba, bool fondo_ajedrezado) {
+    uint8_t* datos_ppm = malloc(ancho * altura * 3);
 
-    for (unsigned int y = 0; y < altura; y++) {
-        for (unsigned int x = 0; x < ancho; x++) {
+    for (uint32_t y = 0; y < altura; y++) {
+        for (uint32_t x = 0; x < ancho; x++) {
             datos_ppm[((y * ancho) + x)*3] = (unsigned char)((datos_rgba[(y * ancho) + x]) & 0xFF);
             datos_ppm[(((y * ancho) + x)*3) + 1] = (unsigned char)((datos_rgba[(y * ancho) + x] >> 8) & 0xFF);
             datos_ppm[(((y * ancho) + x)*3) + 2] = (unsigned char)((datos_rgba[(y * ancho) + x] >> 16) & 0xFF);
@@ -19,7 +20,7 @@ unsigned char* convertir_imagen_rgba_a_datos_ppm (const unsigned int ancho, cons
 }
 
 // image_data es una lista de bytes de rgb que van entre 0 y 255. está ordenada de izquizerda a derecha y de arriba a abajo
-bool escribir_ppm(const char* filename, const unsigned int ancho, const unsigned int altura, const unsigned char* image_data) {
+bool escribir_ppm(const char* filename, uint32_t ancho, uint32_t altura, uint8_t* image_data) {
     FILE* archivo_ppm;
     archivo_ppm = fopen(filename, "wb");
     if (!archivo_ppm) {

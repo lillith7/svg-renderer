@@ -1,3 +1,5 @@
 #pragma once
 
-void circulo(int x, int y, unsigned int radio, unsigned int color, unsigned int ancho, unsigned int altura, unsigned int* imagen);
+#include <stdint.h>
+
+void circulo(int32_t x, int32_t y, int32_t radio, uint32_t color, uint32_t ancho, uint32_t altura, uint32_t* imagen);
