@@ -1,6 +1,8 @@
 #include <color.h>
 
 #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
 uint32_t promediar_colores(const uint32_t colora, const uint32_t colorb) {
     uint32_t a = (((colora >> 24) & 0xff) + ((colorb >> 24) & 0xff)) / 2;
@@ -77,4 +79,43 @@ uint32_t mezclar_rgba(uint32_t color_a, uint32_t color_b) {
     // recombinar el color
     return ((uint32_t)out_a << 24) | ((uint32_t)out_b << 16) | ((uint32_t)out_g << 8) | (uint32_t)out_r;
 
+}
+
+uint32_t parsar_cadena_de_color(char* cadena) {
+    uint32_t color = 0xff000000;
+    if(cadena[0] == '#') { // formato #39c568, #fa8, #37fba937, o #82ba (rrggbb, rgb, rrggbbaa, o rgba)
+
+        if (strlen(cadena) == 4) { // formato #fa8 (#rgb)
+            uint8_t cadena_actual[2] = {0,0};
+
+            cadena_actual[0] = cadena[3]; // azul
+            color = (color & 0xFF00FFFF) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)) << 16);
+
+            cadena_actual[0] = cadena[2]; // verde
+            color = (color & 0xFFFF00FF) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)) << 8);
+
+            cadena_actual[0] = cadena[1]; // rojo
+            color = (color & 0xFFFFFF00) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)));
+
+            return color;
+        }
+
+        if (strlen(cadena) == 5) { // formato #fa88 (#rgba)
+            uint8_t cadena_actual[2] = {0,0};
+
+            cadena_actual[0] = cadena[3]; // azul
+            color = (color & 0xFF00FFFF) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)) << 16);
+
+            cadena_actual[0] = cadena[2]; // verde
+            color = (color & 0xFFFF00FF) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)) << 8);
+
+            cadena_actual[0] = cadena[1]; // rojo
+            color = (color & 0xFFFFFF00) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)));
+
+            cadena_actual[0] = cadena[4]; // alfa
+            color = (color & 0x00FFFFFF) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)) << 24);
+
+            return color;
+        }
+    }
 }

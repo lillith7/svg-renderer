@@ -61,6 +61,10 @@ void circulo(int x, int y, unsigned int radio, unsigned int color, unsigned int 
                 }
             }
 
+            if (puntos == 4) {
+                continue;
+            }
+
             double valor_alfa = ((color >> 24) & 0xFF)/255;
             // valor_alfa = reducir_alfa(valor_alfa, puntos, 4);
             valor_alfa = valor_alfa * ((4 - puntos) / 4.0);
