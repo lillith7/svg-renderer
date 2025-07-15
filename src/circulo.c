@@ -4,6 +4,7 @@
 #include <pixel.h>
 #include <multisample.h>
 #include <color.h>
+#include <capa.h>
 
 #include <stdint.h>
 #include <stdio.h>
@@ -12,7 +13,7 @@
 
 // color es un arreglo con tres elementos para r, g, y b que van de 0 a 255
 // "ancho" y "altura" son el ancho y la altura de la imagen, no el circulo
-void dibujar_circulo(int32_t x, int32_t y, double radio, uint32_t color, uint32_t ancho, uint32_t altura, uint32_t* imagen, bool usar_multisampling) {
+void dibujar_circulo(int32_t x, int32_t y, double radio, uint32_t color, capa_t capa, bool usar_multisampling) {
 
     int32_t xmin = x-radio;
     if (xmin<0) {
@@ -20,8 +21,8 @@ void dibujar_circulo(int32_t x, int32_t y, double radio, uint32_t color, uint32_
     }
 
     int32_t xmax = x+radio;
-    if (xmax>ancho) {
-        xmax = ancho;
+    if (xmax>capa.ancho) {
+        xmax = capa.ancho;
     }
 
     int32_t ymin = y-radio;
@@ -30,8 +31,8 @@ void dibujar_circulo(int32_t x, int32_t y, double radio, uint32_t color, uint32_
     }
 
     int32_t ymax = y+radio;
-    if(ymax>altura) {
-        ymax=altura;
+    if(ymax>capa.altura) {
+        ymax=capa.altura;
     }
 
     if (!usar_multisampling) {
@@ -39,7 +40,7 @@ void dibujar_circulo(int32_t x, int32_t y, double radio, uint32_t color, uint32_
         for (uint32_t x_actual = xmin; x_actual < xmax; x_actual++){
             for (uint32_t y_actual = ymin; y_actual < ymax; y_actual++) {
                 if (distancia(x, y, x_actual, y_actual) <= radio) {
-                    poner_pixel(x_actual, y_actual, ancho, color, imagen);
+                    poner_pixel(x_actual, y_actual, color, capa);
                 }
             }
         }
@@ -72,7 +73,7 @@ void dibujar_circulo(int32_t x, int32_t y, double radio, uint32_t color, uint32_
                 double alfa_final = alfa_base * cobertura;
 
                 uint32_t color_final = (color & 0x00FFFFFF) | ((uint32_t)(alfa_final * 255.0) << 24);
-                poner_pixel(x_actual, y_actual, ancho, color_final, imagen);
+                poner_pixel(x_actual, y_actual, color_final, capa);
 
             }
         }

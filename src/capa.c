@@ -20,9 +20,8 @@ capa_t combinar_capas(capa_t capa_superior, capa_t capa_inferior){
             poner_pixel(
                 x,
                 y,
-                capa_inferior.ancho,
                 mezclar_rgba(capa_superior.imagen[(x+(y*capa_inferior.ancho))], capa_inferior.imagen[(x+(y*capa_inferior.ancho))]),
-                nueva_capa.imagen
+                nueva_capa
             );
         }
     }

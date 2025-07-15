@@ -1,18 +1,20 @@
 #include <ppm.h>
 
+#include <capa.h>
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 
-uint8_t* convertir_imagen_rgba_a_datos_ppm (uint32_t ancho, uint32_t altura, uint32_t* datos_rgba, bool fondo_ajedrezado) {
-    uint8_t* datos_ppm = malloc(ancho * altura * 3);
+uint8_t* convertir_imagen_rgba_a_datos_ppm (capa_t capa, bool fondo_ajedrezado) {
+    uint8_t* datos_ppm = malloc(capa.ancho * capa.altura * 3);
 
-    for (uint32_t y = 0; y < altura; y++) {
-        for (uint32_t x = 0; x < ancho; x++) {
-            datos_ppm[((y * ancho) + x)*3] = (unsigned char)((datos_rgba[(y * ancho) + x]) & 0xFF);
-            datos_ppm[(((y * ancho) + x)*3) + 1] = (unsigned char)((datos_rgba[(y * ancho) + x] >> 8) & 0xFF);
-            datos_ppm[(((y * ancho) + x)*3) + 2] = (unsigned char)((datos_rgba[(y * ancho) + x] >> 16) & 0xFF);
+    for (uint32_t y = 0; y < capa.altura; y++) {
+        for (uint32_t x = 0; x < capa.ancho; x++) {
+            datos_ppm[((y * capa.ancho) + x)*3] = (unsigned char)((capa.imagen[(y * capa.ancho) + x]) & 0xFF);
+            datos_ppm[(((y * capa.ancho) + x)*3) + 1] = (unsigned char)((capa.imagen[(y * capa.ancho) + x] >> 8) & 0xFF);
+            datos_ppm[(((y * capa.ancho) + x)*3) + 2] = (unsigned char)((capa.imagen[(y * capa.ancho) + x] >> 16) & 0xFF);
         }
     }
 

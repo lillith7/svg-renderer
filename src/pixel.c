@@ -1,7 +1,9 @@
 #include <pixel.h>
 
+#include <capa.h>
+
 #include <stdint.h>
 
-void poner_pixel(uint32_t x, uint32_t y, uint32_t ancho, uint32_t color, uint32_t* imagen) {
-    imagen[(x+(y*ancho))] = color;
+void poner_pixel(uint32_t x, uint32_t y, uint32_t color, capa_t capa) {
+    capa.imagen[(x+(y*capa.ancho))] = color;
 }

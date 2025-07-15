@@ -24,7 +24,7 @@ capa_t dibujar_contorno(capa_t capa, uint32_t color, double ancho) {
                     !(capa.imagen[(x-1)+(y*capa.ancho)]) || 
                     !(capa.imagen[x+((y+1)*capa.ancho)]) || 
                     !(capa.imagen[x+((y-1)*capa.ancho)])) {
-                        dibujar_circulo(x,y,ancho,color,capa.ancho,capa.altura,capa_actual.imagen,false);
+                        dibujar_circulo(x,y,ancho,color,capa_actual,true);
                     }
             }
         }

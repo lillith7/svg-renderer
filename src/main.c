@@ -85,11 +85,11 @@ int main(int argc, char** argv) {
             
             // si "stroke" está activado, dibujar el circulo sin multisampling y dibujar el contorno
             if (xmlGetProp(nodo,"stroke")) {
-                dibujar_circulo(x,y,radio,parsar_cadena_de_color(xmlGetProp(nodo,"fill")),ancho,altura,capa.imagen, false);
+                dibujar_circulo(x,y,radio,parsar_cadena_de_color(xmlGetProp(nodo,"fill")),capa, false);
 
                 capa = dibujar_contorno(capa,parsar_cadena_de_color(xmlGetProp(nodo,"stroke")),atof(xmlGetProp(nodo,"stroke-width")));
             } else {
-                dibujar_circulo(x,y,radio,parsar_cadena_de_color(xmlGetProp(nodo,"fill")),ancho,altura,capa.imagen, ACTIVAR_MULTISAMPLE);
+                dibujar_circulo(x,y,radio,parsar_cadena_de_color(xmlGetProp(nodo,"fill")),capa, ACTIVAR_MULTISAMPLE);
             }
         }
 
@@ -98,7 +98,7 @@ int main(int argc, char** argv) {
         nodo = nodo->next;
     }
 
-    uint8_t* datos_ppm = convertir_imagen_rgba_a_datos_ppm(ancho, altura, fondo.imagen, false);
+    uint8_t* datos_ppm = convertir_imagen_rgba_a_datos_ppm(fondo, false);
     escribir_ppm(argv[2], ancho, altura, datos_ppm);
 
     return 0;
