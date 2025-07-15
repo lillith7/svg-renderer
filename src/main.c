@@ -38,12 +38,12 @@ int main(int argc, char** argv) {
 
     if (!nodo) {
         puts("el archivo está vacio");
-        return 0;
+        return 1;
     }
 
     if (strcmp(nodo->name,"svg")) {
         puts("el archivo no es un svg");
-        return 0;
+        return 1;
     }
 
     uint32_t ancho = atoi(xmlGetProp(nodo, "width"));
@@ -65,18 +65,18 @@ int main(int argc, char** argv) {
     capa_t fondo;
     fondo.ancho = ancho;
     fondo.altura = altura;
-    fondo.imagen = malloc(ancho*altura*4);
+    fondo.imagen = malloc(ancho*altura*sizeof(uint32_t));
 
-    memset(fondo.imagen,0xff,ancho*altura*4);
+    memset(fondo.imagen,0xff,ancho*altura*sizeof(uint32_t));
 
     while (nodo) {
 
         capa_t capa;
         capa.ancho = ancho;
         capa.altura = altura;
-        capa.imagen = malloc(ancho*altura*4);
+        capa.imagen = malloc(ancho*altura*sizeof(uint32_t));
 
-        memset(capa.imagen,0x00,ancho*altura*4);
+        memset(capa.imagen,0x00,ancho*altura*sizeof(uint32_t));
 
         if(!strcmp(nodo->name,"circle")) {
             const double radio = atof(xmlGetProp(nodo, "r"));
@@ -99,7 +99,10 @@ int main(int argc, char** argv) {
     }
 
     uint8_t* datos_ppm = convertir_imagen_rgba_a_datos_ppm(fondo, false);
-    escribir_ppm(argv[2], ancho, altura, datos_ppm);
-
-    return 0;
+    
+    if (escribir_ppm(argv[2], ancho, altura, datos_ppm)) {
+        return 0; // el archivo fue escrito correctamente
+    } else {
+        return 1;
+    }
 }

@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+// REESCRIBIR ESTE CÓDIGO PRONTO, ES COMPLETAMENTE HORRIBLE
 capa_t dibujar_contorno(capa_t capa, uint32_t color, double ancho) {
     capa_t capa_actual;
     capa_actual.x = capa.x;
@@ -31,5 +32,4 @@ capa_t dibujar_contorno(capa_t capa, uint32_t color, double ancho) {
     }
 
     return combinar_capas(capa_actual,capa);
-    // return capa_actual;
 }

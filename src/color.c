@@ -4,47 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-uint32_t promediar_colores(const uint32_t colora, const uint32_t colorb) {
-    uint32_t a = (((colora >> 24) & 0xff) + ((colorb >> 24) & 0xff)) / 2;
-    uint32_t b = (((colora >> 16) & 0xff) + ((colorb >> 16) & 0xff)) / 2;
-    uint32_t g = (((colora >> 8) & 0xff) + ((colorb >> 8) & 0xff)) / 2;
-    uint32_t r = (((colora) & 0xff) + ((colorb) & 0xff)) / 2;
-
-    uint32_t color = 0;
-    color += a << 24;
-    color += b << 16;
-    color += g << 8;
-    color += r;
-    return color;
-}
-
-uint32_t promediar_colores_multiples(uint8_t numero, uint32_t* colores) {
-    uint64_t a = 0;
-    uint64_t b = 0;
-    uint64_t g = 0;
-    uint64_t r = 0;
-
-    for (uint8_t i = 0; i < numero; i++) {
-        a += (colores[i] >> 24) & 0xff;
-        b += (colores[i] >> 16) & 0xff;
-        g += (colores[i] >> 8) & 0xff;
-        r += (colores[i]) & 0xff;
-    }
-
-    a /= numero;
-    b /= numero;
-    g /= numero;
-    r /= numero;
-
-    uint32_t color = 0;
-    color += a << 24;
-    color += b << 16;
-    color += g << 8;
-    color += r;
-
-    return color;
-}
-
 // color a está por encima del color b
 uint32_t mezclar_rgba(uint32_t color_a, uint32_t color_b) {
     uint8_t a_a = (color_a >> 24) & 0xFF;

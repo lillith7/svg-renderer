@@ -15,6 +15,7 @@
 // "ancho" y "altura" son el ancho y la altura de la imagen, no el circulo
 void dibujar_circulo(int32_t x, int32_t y, double radio, uint32_t color, capa_t capa, bool usar_multisampling) {
 
+    // establecer el cuadrado delimitador
     int32_t xmin = x-radio;
     if (xmin<0) {
         xmin = 0;
@@ -49,6 +50,7 @@ void dibujar_circulo(int32_t x, int32_t y, double radio, uint32_t color, capa_t 
         
         for (uint32_t x_actual = xmin; x_actual < xmax; x_actual++){
             for (uint32_t y_actual = ymin; y_actual < ymax; y_actual++) {
+                // el multisampling checa si 4 puntos separados están en el círculo
                 double puntos = 4;
 
                 for (uint8_t i = 0; i < 2; i++) {
@@ -60,18 +62,20 @@ void dibujar_circulo(int32_t x, int32_t y, double radio, uint32_t color, capa_t 
                     }
                 }
 
+                // 4 puntos significa que ninguno de los puntos fueron en el círculo
                 if (puntos == 4) {
                     continue;
                 }
 
+                // mezclar el alfa según el número de puntos
                 double valor_alfa = ((color >> 24) & 0xFF)/255;
-                // valor_alfa = reducir_alfa(valor_alfa, puntos, 4);
                 valor_alfa = valor_alfa * ((4 - puntos) / 4.0);
 
                 double alfa_base = ((color >> 24) & 0xFF) / 255.0;
                 double cobertura = (4 - puntos) / 4.0;
                 double alfa_final = alfa_base * cobertura;
 
+                // desnormalizar el valor alfa y insertarlo
                 uint32_t color_final = (color & 0x00FFFFFF) | ((uint32_t)(alfa_final * 255.0) << 24);
                 poner_pixel(x_actual, y_actual, color_final, capa);
 
