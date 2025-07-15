@@ -3,11 +3,14 @@
 #include <pixel.h>
 #include <color.h>
 #include <capa.h>
+#include <multisample.h>
+#include <contorno.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
@@ -76,10 +79,18 @@ int main(int argc, char** argv) {
         memset(capa.imagen,0x00,ancho*altura*4);
 
         if(!strcmp(nodo->name,"circle")) {
-            const int32_t radio = atoi(xmlGetProp(nodo, "r"));
+            const double radio = atof(xmlGetProp(nodo, "r"));
             const int32_t x = atoi(xmlGetProp(nodo, "cx"));
             const int32_t y = atoi(xmlGetProp(nodo, "cy"));
-            circulo(x,y,radio,parsar_cadena_de_color(xmlGetProp(nodo,"fill")),ancho,altura,capa.imagen);
+            
+            // si "stroke" está activado, dibujar el circulo sin multisampling y dibujar el contorno
+            if (xmlGetProp(nodo,"stroke")) {
+                dibujar_circulo(x,y,radio,parsar_cadena_de_color(xmlGetProp(nodo,"fill")),ancho,altura,capa.imagen, false);
+
+                capa = dibujar_contorno(capa,parsar_cadena_de_color(xmlGetProp(nodo,"stroke")),atof(xmlGetProp(nodo,"stroke-width")));
+            } else {
+                dibujar_circulo(x,y,radio,parsar_cadena_de_color(xmlGetProp(nodo,"fill")),ancho,altura,capa.imagen, ACTIVAR_MULTISAMPLE);
+            }
         }
 
         fondo = combinar_capas(capa, fondo);

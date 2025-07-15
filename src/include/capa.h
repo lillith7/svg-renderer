@@ -11,3 +11,4 @@ typedef struct capa_s {
 } capa_t;
 
 capa_t combinar_capas(capa_t capa_superior, capa_t capa_inferior);
+capa_t clonar_capa(capa_t capa);

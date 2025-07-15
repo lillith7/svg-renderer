@@ -1,3 +1,5 @@
 #pragma once
 
-#define ACTIVAR_MULTISAMPLE
+#include <stdbool.h>
+
+#define ACTIVAR_MULTISAMPLE true
