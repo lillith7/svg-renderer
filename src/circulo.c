@@ -5,6 +5,7 @@
 #include <multisample.h>
 #include <color.h>
 #include <capa.h>
+#include <bitwise.h>
 
 #include <stdint.h>
 #include <stdio.h>
@@ -68,15 +69,15 @@ void dibujar_circulo(int32_t x, int32_t y, double radio, uint32_t color, capa_t 
                 }
 
                 // mezclar el alfa según el número de puntos
-                double valor_alfa = ((color >> 24) & 0xFF)/255;
+                double valor_alfa = conseguir_byte(color,3)/255.0f;
                 valor_alfa = valor_alfa * ((4 - puntos) / 4.0);
 
-                double alfa_base = ((color >> 24) & 0xFF) / 255.0;
+                double alfa_base = conseguir_byte(color,3)/255.0f;
                 double cobertura = (4 - puntos) / 4.0;
                 double alfa_final = alfa_base * cobertura;
 
                 // desnormalizar el valor alfa y insertarlo
-                uint32_t color_final = (color & 0x00FFFFFF) | ((uint32_t)(alfa_final * 255.0) << 24);
+                uint32_t color_final = poner_byte(color,alfa_final*255.0f,3);
                 poner_pixel(x_actual, y_actual, color_final, capa);
 
             }

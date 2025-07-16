@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(image)
 include_directories(src/include)
-add_executable(image src/main.c src/ppm.c src/distancia.c src/circulo.c src/pixel.c src/color.c src/capa.c src/contorno.c)
+add_executable(image src/main.c src/ppm.c src/distancia.c src/circulo.c src/pixel.c src/color.c src/capa.c src/contorno.c src/bitwise.c)
 find_package(LibXml2 REQUIRED)
 include_directories(/usr/include/libxml2)
 target_link_libraries(image PRIVATE LibXml2::LibXml2)

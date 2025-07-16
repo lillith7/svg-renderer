@@ -5,6 +5,7 @@
 #include <capa.h>
 #include <multisample.h>
 #include <contorno.h>
+#include <bitwise.h>
 
 #include <stdio.h>
 #include <stdlib.h>

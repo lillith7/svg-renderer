@@ -1,6 +1,7 @@
 #include <ppm.h>
 
 #include <capa.h>
+#include <bitwise.h>
 
 #include <stdbool.h>
 #include <stdio.h>

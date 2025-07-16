@@ -1,20 +1,23 @@
 #include <color.h>
 
+#include <bitwise.h>
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
 // color a está por encima del color b
 uint32_t mezclar_rgba(uint32_t color_a, uint32_t color_b) {
-    uint8_t a_a = (color_a >> 24) & 0xFF;
-    uint8_t a_b = (color_a >> 16) & 0xFF;
-    uint8_t a_g = (color_a >> 8) & 0xFF;
-    uint8_t a_r = color_a & 0xFF;
 
-    uint8_t b_a = (color_b >> 24) & 0xFF;
-    uint8_t b_b = (color_b >> 16) & 0xFF;
-    uint8_t b_g = (color_b >> 8) & 0xFF;
-    uint8_t b_r = color_b & 0xFF;
+    uint8_t a_a = conseguir_byte(color_a,3);
+    uint8_t a_b = conseguir_byte(color_a,2);
+    uint8_t a_g = conseguir_byte(color_a,1);
+    uint8_t a_r = conseguir_byte(color_a,0);
+
+    uint8_t b_a = conseguir_byte(color_b, 3);
+    uint8_t b_b = conseguir_byte(color_b, 2);
+    uint8_t b_g = conseguir_byte(color_b, 1);
+    uint8_t b_r = conseguir_byte(color_b, 0);
 
     // normalizar el valor alfa
     float a_a_norm = a_a / 255.0f;
@@ -48,13 +51,13 @@ uint32_t parsar_cadena_de_color(char* cadena) {
             uint8_t cadena_actual[2] = {0,0};
 
             cadena_actual[0] = cadena[3]; // azul
-            color = (color & 0xFF00FFFF) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)) << 16);
+            color = poner_byte(color,(strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16),2);
 
             cadena_actual[0] = cadena[2]; // verde
-            color = (color & 0xFFFF00FF) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)) << 8);
+            color = poner_byte(color,(strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16),1);
 
             cadena_actual[0] = cadena[1]; // rojo
-            color = (color & 0xFFFFFF00) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)));
+            color = poner_byte(color,(strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16),0);
 
             return color;
         }
@@ -63,16 +66,16 @@ uint32_t parsar_cadena_de_color(char* cadena) {
             uint8_t cadena_actual[2] = {0,0};
 
             cadena_actual[0] = cadena[4]; // alfa
-            color = (color & 0x00FFFFFF) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)) << 24);
+            color = poner_byte(color,(strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16),3);
 
             cadena_actual[0] = cadena[3]; // azul
-            color = (color & 0xFF00FFFF) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)) << 16);
+            color = poner_byte(color,(strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16),2);
 
             cadena_actual[0] = cadena[2]; // verde
-            color = (color & 0xFFFF00FF) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)) << 8);
+            color = poner_byte(color,(strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16),1);
 
             cadena_actual[0] = cadena[1]; // rojo
-            color = (color & 0xFFFFFF00) | ((uint32_t)((strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16)));
+            color = poner_byte(color,(strtol(cadena_actual,NULL,16)<<4)+strtol(cadena_actual,NULL,16),0);
 
             return color;
         }
